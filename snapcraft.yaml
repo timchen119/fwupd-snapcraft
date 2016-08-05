@@ -1,0 +1,85 @@
+name: uefi-fw-tools # the name of the snap
+version: 1.0-0.7.2+git # the version of the snap
+summary: UEFI Firmware update tools # 79 char long summary
+description: # A longer description for the snap
+    uefi-fw-tools is a snap for UEFI firmware tool, currently include fwupd.
+
+    fwupd is a daemon to allow session software to update device firmware.
+    You can either use a GUI software manager like GNOME Software to view and
+    apply updates, the command-line tool or the system D-Bus interface directly.
+    Currently, firmware updates using the UEFI capsule format and for the
+    ColorHug are supported. More formats may be supported in the future.
+    See <https://github.com/hughsie/fwupd> for details
+
+plugs:
+  fwupdmgr:
+    interface: uefi-manager
+
+slots:
+  service:
+    interface: uefi-manager
+
+apps:
+    fwupdmgr:
+        command: bin/fwupdmgr.sh
+        plugs: [network, network-bind, fwupdmgr]
+    fwupd:
+        command: bin/fwupd.sh
+        daemon: simple
+        plugs: [network, network-bind]
+        slots: [service]
+
+#confinement: strict
+confinement: devmode
+
+parts:
+    fwupd:
+        plugin: autotools
+        source: https://github.com/timchen119/fwupd.git
+        source-type: git
+        source-branch: uefi-fw-tools-uc16-snap
+        build-packages:
+          - docbook-utils
+          - gettext
+          - intltool
+          - libappstream-glib-dev
+          - libarchive-dev
+          - libcolord-dev
+          - libfwup-dev
+          - libgcab-dev
+          - gcab
+          - libgirepository1.0-dev
+          - libglib2.0-dev
+          - libgpgme11-dev
+          - gnupg2
+          - libtool-bin
+          - libgudev-1.0-dev
+          - udev
+          - libgusb-dev
+          - libpolkit-gobject-1-dev
+          - libsqlite3-dev
+          - pkg-config
+          - libsoup2.4-dev
+          - gtk-doc-tools
+          - libcolorhug-dev
+          - valgrind
+          - libsmbios-dev
+        stage-packages:
+          - glib-networking
+          - gnupg
+        configflags:
+          - --disable-gtk-doc
+          - --disable-gtk-doc-html
+          - --disable-gtk-doc-pdf
+    update-mime:
+        plugin: make
+        source: update-mime
+        stage-packages:
+          - shared-mime-info
+          - libxml2
+        after: [fwupd]
+    startup-wrapper:
+        plugin: copy
+        files:
+          fwupd.sh: bin/fwupd.sh
+          fwupdmgr.sh: bin/fwupdmgr.sh
