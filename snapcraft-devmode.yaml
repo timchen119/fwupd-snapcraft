@@ -11,25 +11,16 @@ description: # A longer description for the snap
     ColorHug are supported. More formats may be supported in the future.
     See <https://github.com/hughsie/fwupd> for details
 
-plugs:
-  fwupdmgr:
-    interface: uefi-manager
-
-slots:
-  service:
-    interface: uefi-manager
-
 apps:
     fwupdmgr:
         command: bin/fwupdmgr.sh
-        plugs: [network, network-bind, fwupdmgr]
+        plugs: [network, network-bind]
     fwupd:
         command: bin/fwupd.sh
         daemon: simple
         plugs: [network, network-bind]
-        slots: [service]
 
-confinement: strict
+confinement: devmode
 
 parts:
     fwupd:
