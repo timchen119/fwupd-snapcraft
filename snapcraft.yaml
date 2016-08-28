@@ -1,5 +1,5 @@
 name: uefi-fw-tools # the name of the snap
-version: 1.0-0.7.2+git # the version of the snap
+version: 1.1-0.7.2+git # the version of the snap
 summary: UEFI Firmware update tools # 79 char long summary
 description: # A longer description for the snap
     uefi-fw-tools is a snap for UEFI firmware tool, currently include fwupd.
@@ -16,18 +16,17 @@ plugs:
     interface: fwupd
 
 slots:
-  service:
+  fwupd:
     interface: fwupd
 
 apps:
     fwupdmgr:
         command: bin/fwupdmgr.sh
-        plugs: [network, network-bind, fwupdmgr]
+        plugs: [fwupdmgr]
     fwupd:
         command: bin/fwupd.sh
         daemon: simple
-        plugs: [network, network-bind]
-        slots: [service]
+        slots: [fwupd]
 
 confinement: strict
 
@@ -36,7 +35,7 @@ parts:
         plugin: make
         source: https://github.com/timchen119/efivar.git
         source-type: git
-#        source-branch: debugging
+        source-branch: efivar-udev
         build-packages:
           - libpopt-dev
         organize:
@@ -51,7 +50,6 @@ parts:
         plugin: make
         source: https://github.com/timchen119/fwupdate.git
         source-type: git
-#        source-branch: debugging
         make-parameters:
           - EFIDIR=ubuntu
           - GNUEFIDIR=/usr/lib
