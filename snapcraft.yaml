@@ -114,8 +114,9 @@ parts:
           - libxml2
         after: [fwupd]
     startup-wrapper:
-        plugin: copy
-        files:
+        plugin: dump
+        source: startup-wrapper
+        organize:
           fwupd.sh: bin/fwupd.sh
           fwupdmgr.sh: bin/fwupdmgr.sh
         after: [update-mime]
