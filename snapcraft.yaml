@@ -33,7 +33,7 @@ confinement: strict
 parts:
     libefivar-dev:
         plugin: make
-        source: https://github.com/timchen119/efivar.git
+        source: https://github.com/lyoncore/efivar.git
         source-type: git
         source-branch: efivar-udev
         build-packages:
@@ -48,7 +48,7 @@ parts:
         after: [libefivar-dev]
     libfwup-dev:
         plugin: make
-        source: https://github.com/timchen119/fwupdate.git
+        source: https://github.com/lyoncore/fwupdate.git
         source-type: git
         make-parameters:
           - EFIDIR=ubuntu
@@ -68,7 +68,7 @@ parts:
         after: [libefivar-fixpkgconfig]
     fwupd:
         plugin: autotools
-        source: https://github.com/timchen119/fwupd.git
+        source: https://github.com/lyoncore/fwupd.git
         source-type: git
         source-branch: uefi-fw-tools-uc16-snap
         build-packages:
