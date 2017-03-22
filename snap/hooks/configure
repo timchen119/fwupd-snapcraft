@@ -1,0 +1,20 @@
+#!/bin/bash
+default_conf() {
+    if [ ! -f "$SNAP_DATA"/etc/fwupd.conf ]
+    then
+            mkdir -p "$SNAP_DATA/etc"
+            cp "$SNAP/etc/fwupd.conf" "$SNAP_DATA/etc/fwupd.conf"
+    fi
+
+    if [ ! -d $SNAP_DATA/etc/pki ]
+    then
+            cp -r $SNAP/etc/pki $SNAP_DATA/etc/
+    fi
+}
+
+default_conf
+
+value=$(snapctl get conf.downloaduri)
+if [ -n "$value" ]; then
+	sed -i "s>DownloadURI=.*>DownloadURI=$value>" "$SNAP_DATA/etc/fwupd.conf"
+fi
