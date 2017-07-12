@@ -11,7 +11,7 @@ description: # A longer description for the snap
     ColorHug are supported. More formats may be supported in the future.
     See <https://github.com/hughsie/fwupd> for details
 grade: stable
-confinement: strict
+confinement: classic
 
 apps:
     fwupdmgr:
