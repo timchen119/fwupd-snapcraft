@@ -15,7 +15,7 @@ default_conf() {
 default_conf
 
 value=$(snapctl get conf.downloaduri)
-if [ -n "$value" ]; then
+if [ -n "$value" ] && [ "$value" != "https://secure-lvfs.rhcloud.com/downloads/firmware.xml.gz" ]; then
 	sed -i "s>DownloadURI=.*>DownloadURI=$value>" "$SNAP_DATA/etc/fwupd.conf"
 else
 	#setup default conf.downloaduri from the default fwupd.conf
