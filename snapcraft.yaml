@@ -1,5 +1,5 @@
 name: uefi-fw-tools # the name of the snap
-version: 1.5.1-0.7.2+git # the version of the snap
+version: 1.5.2-0.7.2+git # the version of the snap
 summary: UEFI Firmware update tools # 79 char long summary
 description: # A longer description for the snap
     uefi-fw-tools is a snap for UEFI firmware tool, currently include fwupd.

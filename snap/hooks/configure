@@ -6,18 +6,27 @@ default_conf() {
             cp "$SNAP/etc/fwupd.conf" "$SNAP_DATA/etc/fwupd.conf"
     fi
 
-    if [ ! -d $SNAP_DATA/etc/pki ]
+    if [ ! -d "$SNAP_DATA"/etc/pki ]
     then
-            cp -r $SNAP/etc/pki $SNAP_DATA/etc/
+            cp -r "$SNAP"/etc/pki "$SNAP_DATA"/etc/
     fi
 }
 
 default_conf
 
 value=$(snapctl get conf.downloaduri)
-if [ -n "$value" ] && [ "$value" != "https://secure-lvfs.rhcloud.com/downloads/firmware.xml.gz" ]; then
+
+new_snap_default_value=$(sed -n "s/DownloadURI=\(.*\)/\1/p" "$SNAP/etc/fwupd.conf")
+
+if [ "$value" == "https://secure-lvfs.rhcloud.com/downloads/firmware.xml.gz" ]; then #add more check if we moved metadata url again
+	#replace the old value from new snap fwupd.conf
+	value=$new_snap_default_value
+fi
+
+#write new download uri conf to fwupd.conf
+if [ -n "$value" ]; then
 	sed -i "s>DownloadURI=.*>DownloadURI=$value>" "$SNAP_DATA/etc/fwupd.conf"
 else
-	#setup default conf.downloaduri from the default fwupd.conf
-	snapctl set conf.downloaduri=$(sed -n "s/DownloadURI=\(.*\)/\1/p" $SNAP/etc/fwupd.conf)
+	#if no conf.downloaduri found, setup it from the default fwupd.conf
+	snapctl set conf.downloaduri="$new_snap_default_value"
 fi
