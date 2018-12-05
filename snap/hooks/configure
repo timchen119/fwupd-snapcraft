@@ -18,8 +18,11 @@ value=$(snapctl get conf.downloaduri)
 
 new_snap_default_value=$(sed -n "s/DownloadURI=\(.*\)/\1/p" "$SNAP/etc/fwupd.conf")
 
-if [ "$value" == "https://secure-lvfs.rhcloud.com/downloads/firmware.xml.gz" ]; then #add more check if we moved metadata url again
-	#replace the old value from new snap fwupd.conf
+
+if [ "$value" == "https://secure-lvfs.rhcloud.com/downloads/firmware.xml.gz" ] ||
+[ "$value" == "https://s3.amazonaws.com/lvfsbucket/downloads/firmware.xml.gz" ]
+#add more check if we moved metadata url again #replace the old value from new snap fwupd.conf
+then
 	value=$new_snap_default_value
 fi
 
